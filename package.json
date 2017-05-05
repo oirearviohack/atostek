@@ -1,0 +1,29 @@
+{
+  "name": "atostek-oirearviohack",
+  "version": "0.0.1",
+  "description": "#oirearviohack",
+  "engines": {
+    "node": "7.10.0"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "bundle": "browserify cli/main.js -o public/bundle.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "ejs": "^2.5.6",
+    "express": "^4.15.2",
+    "fhir.js": "0.0.20",
+    "jquery": "^3.2.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oirearviohack/atostek"
+  },
+  "private": true,
+  "devDependencies": {
+    "browserify": "^14.3.0",
+    "nodemon": "^1.11.0"
+  }
+}
