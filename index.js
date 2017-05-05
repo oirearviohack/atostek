@@ -18,21 +18,99 @@ app.get('/', (req, res) => {
   return res.render('pages/index');
 });
 
+//noinspection BadExpressionStatementJS
 app.get('/api/heatmap', (req, res) => {
   var query = {
     '$and': [
       { 'code': {$exact: 49727002} },
       { 'meta.versionId': 1 }
     ]};
-  fhir.search({ type: "Observation", query: query })
+  //noinspection BadExpressionStatementJS
+fhir.search({ type: "Observation", query: query })
       .then(data => {
         return res.json(data);
       });
 });
 
 app.post('/api/observation', (req, res) => {
-  return res.json(req.body);
+    var coordinates = {};
+    coordinates.longitude = "64.78444716";
+    coordinates.latitude = "21.12686001";
+
+    var locationEntry = {
+        resource: createLocation(coordinates.latitude, coordinates.longitude)
+    };
+
+    fhir.create(locationEntry)
+        .then(function(response){
+            var coughEntry = {
+                resource: generateCoughObservation(response.data.id, 3)
+            };
+
+            fhir.create(coughEntry)
+                .then(function(response){
+                    console.log("success, observation id " + response.data.id);
+                    return res.json(req.body);
+                })
+                .catch(function(response){
+                    console.log(JSON.stringify(response));
+                    return res.json(req.body);
+                });
+        })
+        .catch(function(response){
+            console.log(JSON.stringify(response));
+            return res.json(req.body);
+        });
+
 });
+
+function createLocation(lat, long) {
+    var location =
+    {
+        resourceType: "Location",
+        position: {
+            longitude: parseFloat(long),
+            latitude: parseFloat(lat)
+        }
+    };
+
+    return location;
+}
+
+
+function generateCoughObservation(locationId, patientId) {
+    var date = new Date();
+    var dateString = date.toISOString();
+
+    var fhirCoughObservation = {
+        resourceType: "Observation",
+        status: "final",
+        code: {
+            coding: [
+                {
+                    system: "http://snomed.info/sct",
+                    code: "49727002",
+                    display: "Observation of cough"
+                }
+            ],
+            text: "Observation of cough"
+        },
+        subject: {
+            reference: "Patient/" + patientId
+        },
+        effectiveDateTime: dateString,
+        extension: [
+            {
+                url: "https://github.com/oirearviohack/atostek/fhir/StructureDefinition/observation-site",
+                valueReference: {
+                    reference: "Location/" + locationId
+                }
+            }
+        ]
+    };
+
+    return fhirCoughObservation;
+}
 
 app.listen(app.get('port'), () => {
   console.log('Node app is running on port', app.get('port'));
