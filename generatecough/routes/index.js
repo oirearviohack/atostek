@@ -13,15 +13,6 @@ router.get('/generate', function(req, res, next) {
     createCoughData(function(response) {
 
     });
-    /*
-     .create(entry)
-     .then(function(response){
-     res.render('data', {title: 'Data lähetetty', data: JSON.stringify(response)});
-     })
-     .catch(function(response){
-     res.render('error', {title: 'Data ei lähetetty'});
-     });
-     */
 });
 
 function createLocation(lat, long) {
@@ -78,6 +69,9 @@ function createCoughData(callback) {
 }
 
 function generateCough(locationId, patientId) {
+    var date = new Date();
+    var dateString = date.toISOString();
+
     var fhirCoughObservation = {
         resourceType: "Observation",
         status: "final",
@@ -94,7 +88,7 @@ function generateCough(locationId, patientId) {
         subject: {
             reference: "Patient/" + patientId
         },
-        effectiveDateTime: "1999-07-02T14:09:46.544+03:00",
+        effectiveDateTime: dateString,
         extension: [
             {
                 url: "https://github.com/oirearviohack/atostek/fhir/StructureDefinition/observation-site",
@@ -129,7 +123,5 @@ function parseLocations(callback) {
         callback(locations);
     });
 }
-
-
 
 module.exports = router;
