@@ -1,0 +1,26 @@
+{
+  "resourceType": "Observation",
+  "status": "final",
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "49727002",
+        "display": "Observation of cough"
+      }
+    ],
+    "text": "Observation of cough"
+  },
+  "subject": {
+    "reference": "Patient/2"
+  },
+  "effectiveDateTime": "1999-07-02T14:09:46.544+03:00",
+  "extension": [
+    {
+      "url": "https://github.com/oirearviohack/atostek/fhir/StructureDefinition/observation-site",
+      "valueReference": {
+        "reference": "Location/269"
+      }
+    }
+  ]
+}
