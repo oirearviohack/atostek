@@ -38,32 +38,27 @@ var pointsArray;
 
         (0, _jquery2.default)('#addCoughToHML').click(function (e) {
             navigator.geolocation.getCurrentPosition(function (position) {
+                console.log(position, pointsArray.length);
+
                 pointsArray.push(new gMaps.LatLng(position.coords.latitude, position.coords.longitude));
-                console.log(position);
-                console.log(pointsArray.length);
+
+                _jquery2.default.ajax({
+                    url: "/api/observation",
+                    type: "POST",
+                    data: JSON.stringify({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function success(data) {
+                        console.log(data);
+                    }
+                });
             });
         });
     }).catch(function (err) {
         console.error(err);
-    });
-
-    (0, _jquery2.default)('button').click(function (e) {
-
-        navigator.geolocation.getCurrentPosition(function (position) {
-            _jquery2.default.ajax({
-                url: "/api/observation",
-                type: "POST",
-                data: JSON.stringify({
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude
-                }),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function success(data) {
-                    alert("köhköh");
-                }
-            });
-        });
     });
 });
 

@@ -130,9 +130,21 @@ $(document).ready(() => {
 
         $('#addCoughToHML').click(e => {
             navigator.geolocation.getCurrentPosition((position) => {
+                console.log(position, pointsArray.length);
+
                 pointsArray.push(new gMaps.LatLng(position.coords.latitude, position.coords.longitude));
-                console.log(position);
-                console.log(pointsArray.length);
+                
+                $.ajax({
+                    url: "/api/observation",
+                    type: "POST",
+                    data: JSON.stringify({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: data => { console.log(data); }
+                });
             });
         });
 
@@ -142,23 +154,6 @@ $(document).ready(() => {
 
     
     
-    $('button').click(e => {
-
-        navigator.geolocation.getCurrentPosition(position => {
-            $.ajax({
-                url: "/api/observation",
-                type: "POST",
-                data: JSON.stringify({
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude
-                }),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: data => { alert("köhköh"); }
-            });
-        });
-        
-    });
 
 
     
