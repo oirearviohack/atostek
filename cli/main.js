@@ -1,4 +1,7 @@
-var $ = require('jquery');
+import loadGoogleMapsAPI from 'load-google-maps-api';
+import $ from 'jquery';
+
+console.log(loadGoogleMapsAPI);
 
 $(document).ready(() => {
 
@@ -9,9 +12,7 @@ $(document).ready(() => {
             data: JSON.stringify({ data:"test" }),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: data => {
-                alert("köhköh");
-            }
+            success: data => { alert("köhköh"); }
         });
     });
 

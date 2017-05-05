@@ -1,24 +1,35 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var $ = require('jquery');
+'use strict';
 
-$(document).ready(() => {
+var _loadGoogleMapsApi = require('load-google-maps-api');
 
-    $('button').click(e => {
-        $.ajax({
+var _loadGoogleMapsApi2 = _interopRequireDefault(_loadGoogleMapsApi);
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+console.log(_loadGoogleMapsApi2.default);
+
+(0, _jquery2.default)(document).ready(function () {
+
+    (0, _jquery2.default)('button').click(function (e) {
+        _jquery2.default.ajax({
             url: "/api/observation",
             type: "POST",
-            data: JSON.stringify({ data:"test" }),
+            data: JSON.stringify({ data: "test" }),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: data => {
+            success: function success(data) {
                 alert("köhköh");
             }
         });
     });
-
 });
 
-},{"jquery":2}],2:[function(require,module,exports){
+},{"jquery":2,"load-google-maps-api":3}],2:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v3.2.1
  * https://jquery.com/
@@ -10273,4 +10284,66 @@ if ( !noGlobal ) {
 return jQuery;
 } );
 
+},{}],3:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function () {
+  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      client = _ref.client,
+      key = _ref.key,
+      language = _ref.language,
+      _ref$libraries = _ref.libraries,
+      libraries = _ref$libraries === undefined ? [] : _ref$libraries,
+      region = _ref.region,
+      _ref$timeout = _ref.timeout,
+      timeout = _ref$timeout === undefined ? 10000 : _ref$timeout,
+      v = _ref.v;
+
+  var callbackName = '__googleMapsApiOnLoadCallback';
+
+  return new Promise(function (resolve, reject) {
+
+    // Exit if not running inside a browser.
+    if (typeof window === 'undefined') {
+      return reject(new Error('Can only load the Google Maps API in the browser'));
+    }
+
+    // Prepare the `script` tag to be inserted into the page.
+    var scriptElement = document.createElement('script');
+    var params = ['callback=' + callbackName];
+    if (client) params.push('client=' + client);
+    if (key) params.push('key=' + key);
+    if (language) params.push('language=' + language);
+    libraries = [].concat(libraries); // Ensure that `libraries` is an array
+    if (libraries.length) params.push('libraries=' + libraries.join(','));
+    if (region) params.push('region=' + region);
+    if (v) params.push('v=' + v);
+    scriptElement.src = 'https://maps.googleapis.com/maps/api/js?' + params.join('&');
+
+    // Timeout if necessary.
+    var timeoutId = null;
+    if (timeout) {
+      timeoutId = setTimeout(function () {
+        window[callbackName] = function () {}; // Set the on load callback to a no-op.
+        reject(new Error('Could not load the Google Maps API'));
+      }, timeout);
+    }
+
+    // Hook up the on load callback.
+    window[callbackName] = function () {
+      if (timeoutId !== null) {
+        clearTimeout(timeoutId);
+      }
+      resolve(window.google.maps);
+      delete window[callbackName];
+    };
+
+    // Insert the `script` tag.
+    document.body.appendChild(scriptElement);
+  });
+};
 },{}]},{},[1]);

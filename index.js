@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var fhir = require('fhir.js')({ baseUrl: 'https://oda.medidemo.fi/phr/baseDstu3' });
+var fhirjs = require('fhir.js');
+var fhir = fhirjs({ baseUrl: 'https://oda.medidemo.fi/phr/baseDstu3' });
 var app = express();
 
 app.set('port', (process.env.PORT || 5000));
@@ -18,9 +19,15 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/heatmap', (req, res) => {
-  return res.json([
-    
-  ]);
+  var query = {
+    '$and': [
+      { 'code': {$exact: 49727002} },
+      { 'meta.versionId': 1 }
+    ]};
+  fhir.search({ type: "Observation", query: query })
+      .then(data => {
+        return res.json(data);
+      });
 });
 
 app.post('/api/observation', (req, res) => {
