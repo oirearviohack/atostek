@@ -2,6 +2,7 @@ var fhirjs = require('fhir.js');
 var fhir = fhirjs({ baseUrl: 'https://oda.medidemo.fi/phr/baseDstu3' });
 var _ = require('lodash');
 var rp = require('request-promise-native');
+var cache = require('memory-cache');
 
 function createLocation(lat, long) {
     var location =
@@ -78,7 +79,7 @@ function getAll(url, previousData) {
             .value();
 
         var newData = _.concat(previousData, locations);
-        if(next && next.url && newData.length <= 100)
+        if(next && next.url)
         {
             return getAll(next.url, newData);
         }
@@ -89,14 +90,36 @@ function getAll(url, previousData) {
     });
 }
 
+exports.startPolling = function()
+{
+    var prev = new Date('2017-05-05T22:06:18.818Z');
+
+    var update = () => {
+        var url = "https://oda.medidemo.fi/phr/baseDstu3/Observation?code=49727002&date=>" + prev.toISOString() + "&_count=50&_sort=-date";
+        
+        return getAll(url, [])
+            .then(locations => {
+                prev = new Date();
+                return Promise.all(_.map(locations, id => {
+                    return fhir.search({ type: "Location", query: { _id: id } })
+                                .then(data => { 
+                        var pos = data.data.entry[0].resource.position;
+                        cache.put(id, pos)
+                    });
+                })).then(() => {
+                    console.log("Avaimia cachessa", cache.keys().length, "kpl");
+                });
+            }).catch(err => 
+                console.error(err)
+            );
+    };
+    
+    update().then(() => {
+        setInterval(update, 20000);
+    });
+
+}
+
 exports.findObservations = function() {
-    return getAll("https://oda.medidemo.fi/phr/baseDstu3/Observation?code=49727002&_count=50&_sort=-date", [])
-        .then(locations => {
-            return Promise.all(_.map(locations, id => {
-                return fhir.search({ type: "Location", query: { _id: id } })
-                            .then(data => { return data.data.entry[0].resource.position; });
-            }));
-        }).catch(err => 
-            console.error(err)
-        );
+    return new Promise((resolve) => resolve(_.map(cache.keys(), cache.get)));
 }

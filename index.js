@@ -14,6 +14,8 @@ app.use(bodyParser.json());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
+OdaPhr.startPolling();
+
 app.get('/', (req, res) => {
   return res.render('pages/index');
 });
