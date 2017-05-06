@@ -5,13 +5,12 @@ import $ from 'jquery';
 var pointsArray;
 
 $(document).ready(() => {
+    $("body").addClass("loading");
 
     loadGoogleMapsAPI({
         key: "AIzaSyCNokgCGgBO7LMvwuiK3NiPivOILZBKieg",
         libraries: ["visualization"]
     }).then((gMaps) => {
-
-        //TODO: INITIALIZE HEATMAP FROM ODA DATA
         pointsArray = new gMaps.MVCArray();
 
         navigator.geolocation.getCurrentPosition((position) => {
@@ -36,6 +35,7 @@ $(document).ready(() => {
                     getCoughData(gMaps).then(function () { console.log("Get data from cache ready.") });
                 }, 20000);
             });
+
         });
 
         $('#addCough').click(e => {
@@ -57,13 +57,9 @@ $(document).ready(() => {
                 });
             });
         });
-
-        
     }).catch((err) => {
         console.error(err);
     });
-
-
 });
 
 function getCoughData(gMaps) {
