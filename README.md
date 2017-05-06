@@ -2,11 +2,11 @@
 
 ## Idea - Cough map
 
-World has a lot of wasted coughing. With our app you can record and store your coughs for other people to see. By seeing a map of coughs you can avoid those areas when coughing becomes epidemic.
+World has a lot of wasted coughing. With our app you can record and store your coughs for other people to see. By seeing a map of coughs you can avoid those areas when coughing becomes an epidemic.
 
-This concept is a perfect application for a public and national welfare instance. It helps to prevent the distibution of cough related diseases and healthcare units can better prepare to reserver resources.
+This concept is a perfect application for a public and national welfare instance. It helps to prevent the distribution of cough related diseases and healthcare units can be better prepared to reserve necessary resources.
 
-This application can be enhanced to actually listen the coughs on a mobile device. Easy start is to listen ambient coughs first. This can be boraded to incorporate an application or algorithm to really diagnose the type of cough.
+This application can be enhanced to actually listen to the coughs on a mobile device. Easy start is to listen for ambient coughs first. This can be broadened to incorporate an application or algorithm to really diagnose the type of cough.
 
 Other future ideas are:
 - Inform local residents to wash their hands better when cough related diseases become epidemic.
