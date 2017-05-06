@@ -79,7 +79,7 @@ function getAll(url, previousData) {
             .value();
 
         var newData = _.concat(previousData, locations);
-        if(next && next.url)
+        if(next && next.url && newData.length <= 50)
         {
             return getAll(next.url, newData);
         }
@@ -93,21 +93,27 @@ function getAll(url, previousData) {
 exports.startPolling = function()
 {
     var prev = new Date('2017-05-05T22:06:18.818Z');
+    //var prev = new Date('2017-05-06T09:06:18.818Z');
+
 
     var update = () => {
-        var url = "https://oda.medidemo.fi/phr/baseDstu3/Observation?code=49727002&date=>" + prev.toISOString() + "&_count=50&_sort=-date";
+        var url = "https://oda.medidemo.fi/phr/baseDstu3/Observation?code=49727002&date=>" + prev.toISOString() + "&_sort=date";
         
         return getAll(url, [])
             .then(locations => {
-                prev = new Date();
+                
                 return Promise.all(_.map(locations, id => {
                     return fhir.search({ type: "Location", query: { _id: id } })
                                 .then(data => { 
                         var pos = data.data.entry[0].resource.position;
+                        var update = new Date(data.data.entry[0].resource.meta.lastUpdated);
+                        if(update > prev) {
+                            prev = update;
+                        }
                         cache.put(id, pos)
                     });
                 })).then(() => {
-                    console.log("Avaimia cachessa", cache.keys().length, "kpl");
+                    console.log("Yskiä cachessa", cache.keys().length, "kpl");
                 });
             }).catch(err => 
                 console.error(err)
@@ -115,7 +121,7 @@ exports.startPolling = function()
     };
     
     update().then(() => {
-        setInterval(update, 20000);
+        setInterval(update, 10000);
     });
 
 }
