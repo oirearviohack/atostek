@@ -1,12 +1,19 @@
-#googleMap {
-    height: 600px;
+html, body, #googleMap {
+    height: 100%;
     width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#googleMap {
+    height: 100%;
+    width: 100%;
+    position: relative;
 }
 
 #floating-panel {
     position: absolute;
-    top: 60px;
-    left: 81%;
+    right: 0;
     z-index: 5;
     background-color: #fff;
     padding: 5px;
@@ -14,4 +21,6 @@
     text-align: center;
     font-family: 'Roboto','sans-serif';
     line-height: 30px;
+    margin-top: 10px;
+    margin-right: 10px;
 }
