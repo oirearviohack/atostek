@@ -49,6 +49,7 @@ var pointsArray;
         });
 
         (0, _jquery2.default)('#addCough').click(function (e) {
+            (0, _jquery2.default)("#addCough").toggleClass("active");
             navigator.geolocation.getCurrentPosition(function (position) {
                 console.log(position, pointsArray.length);
 
@@ -66,6 +67,8 @@ var pointsArray;
                     success: function success(data) {
                         console.log(data);
                     }
+                }).done(function () {
+                    (0, _jquery2.default)("#addCough").toggleClass("active");
                 });
             });
         });

@@ -46,3 +46,7 @@ body.loading {
 body.loading .modal {
     display: block;
 }
+
+.btn-danger.active {
+    background-color: #db221c;
+}

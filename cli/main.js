@@ -39,6 +39,7 @@ $(document).ready(() => {
         });
 
         $('#addCough').click(e => {
+            $("#addCough").toggleClass("active");
             navigator.geolocation.getCurrentPosition((position) => {
                 console.log(position, pointsArray.length);
 
@@ -54,7 +55,10 @@ $(document).ready(() => {
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: data => { console.log(data); }
+                }).done(function() {
+                    $("#addCough").toggleClass("active");
                 });
+
             });
         });
     }).catch((err) => {
