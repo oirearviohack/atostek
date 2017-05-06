@@ -1,6 +1,6 @@
 # Atostek Oirearviohack
 
-## Idea
+## Idea - Cough map
 
 World has a lot of wasted coughing. With our app you can record and store your coughs for other people to see. By seeing a map of coughs you can avoid those areas when coughing becomes epidemic.
 
