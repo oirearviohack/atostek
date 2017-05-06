@@ -11,6 +11,27 @@ var _jquery2 = _interopRequireDefault(_jquery);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var gpsOptions = {
+    timeout: 5000
+};
+
+function showGPSError(error) {
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+            alert("Virhe: Pyyntö päästä käsiksi sijaintitietoihin evättiin");
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert("Virhe: Laita GPS päälle");
+            break;
+        case error.TIMEOUT:
+            alert("Virhe: Pyyntö käyttää sijaintitietoja vanhentui");
+            break;
+        case error.UNKNOWN_ERROR:
+            alert("Virhe: Tuntematon virhe tapahtui");
+            break;
+    }
+}
+
 var pointsArray;
 
 (0, _jquery2.default)(document).ready(function () {
@@ -46,7 +67,7 @@ var pointsArray;
                     });
                 }, 20000);
             });
-        });
+        }, showGPSError);
 
         (0, _jquery2.default)('#addCough').click(function (e) {
             (0, _jquery2.default)("#addCough").toggleClass("active");
@@ -70,7 +91,7 @@ var pointsArray;
                 }).done(function () {
                     (0, _jquery2.default)("#addCough").toggleClass("active");
                 });
-            });
+            }, showGPSError, gpsOptions);
         });
     }).catch(function (err) {
         console.error(err);

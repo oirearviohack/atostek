@@ -1,6 +1,26 @@
 import loadGoogleMapsAPI from 'load-google-maps-api';
 import $ from 'jquery';
 
+var gpsOptions = {
+    timeout: 5000
+}
+
+function showGPSError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            alert("Virhe: Pyyntö päästä käsiksi sijaintitietoihin evättiin");
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert("Virhe: Laita GPS päälle");
+            break;
+        case error.TIMEOUT:
+            alert("Virhe: Pyyntö käyttää sijaintitietoja vanhentui");
+            break;
+        case error.UNKNOWN_ERROR:
+            alert("Virhe: Tuntematon virhe tapahtui");
+            break;
+    }
+}
 
 var pointsArray;
 
@@ -36,7 +56,7 @@ $(document).ready(() => {
                 }, 20000);
             });
 
-        });
+        }, showGPSError, );
 
         $('#addCough').click(e => {
             $("#addCough").toggleClass("active");
@@ -59,7 +79,7 @@ $(document).ready(() => {
                     $("#addCough").toggleClass("active");
                 });
 
-            });
+            }, showGPSError, gpsOptions);
         });
     }).catch((err) => {
         console.error(err);
