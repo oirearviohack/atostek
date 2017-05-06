@@ -20,7 +20,7 @@ Browse to https://atostek-oirearviohack.herokuapp.com/
 
 ## Running Locally
 
-Make sure you have [Node.js](http://nodejs.org/) and the [Heroku CLI](https://cli.heroku.com/) installed.
+Make sure you have [Node.js](http://nodejs.org/) installed.
 
 ```sh
 $ git clone https://github.com/oirearviohack/atostek.git
@@ -32,5 +32,11 @@ $ npm start
 Your app should now be running on [localhost:5000](http://localhost:5000/).
 
 ## Documentation
+Architecture:
 
+![GitHub Logo](/architecture.jpg)
 
+Libraries used:
+- [load-google-maps-api](https://www.npmjs.com/package/load-google-maps-api#usage)
+- [Google Heatmap layer](https://developers.google.com/maps/documentation/javascript/heatmaplayer)
+- [Heatmap layer options](https://developers.google.com/maps/documentation/javascript/reference#HeatmapLayerOptions)
