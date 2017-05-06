@@ -37,9 +37,23 @@ var pointsArray;
                 maxIntensity: 1,
                 radius: 20
             });
+
+            _jquery2.default.ajax({
+                url: "/api/heatmap",
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function success(data) {
+                    console.log(data);
+                    data.forEach(function (element) {
+                        var point = new gMaps.LatLng(element.latitude, element.longitude);
+                        pointsArray.push(point);
+                    }, undefined);
+                }
+            });
         });
 
-        (0, _jquery2.default)('#addCoughToHML').click(function (e) {
+        (0, _jquery2.default)('#addCough').click(function (e) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 console.log(position, pointsArray.length);
 

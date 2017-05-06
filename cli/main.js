@@ -10,9 +10,9 @@ $(document).ready(() => {
         key: "AIzaSyCNokgCGgBO7LMvwuiK3NiPivOILZBKieg",
         libraries: ["visualization"]
     }).then((gMaps) => {
-        
+
         //TODO: INITIALIZE HEATMAP FROM ODA DATA
-        pointsArray = new gMaps.MVCArray(); 
+        pointsArray = new gMaps.MVCArray();
 
         navigator.geolocation.getCurrentPosition((position) => {
             var mapProp = {
@@ -28,14 +28,31 @@ $(document).ready(() => {
                 maxIntensity: 1,
                 radius: 20
             });
+
+            $.ajax({
+                url: "/api/heatmap",
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: data => {
+                    console.log(data);
+                    data.forEach(function (element) {
+                        var point = new gMaps.LatLng(element.latitude, element.longitude);
+                        pointsArray.push(point);
+                    }, this);
+                }
+            });
+
         });
 
-        $('#addCoughToHML').click(e => {
+
+
+        $('#addCough').click(e => {
             navigator.geolocation.getCurrentPosition((position) => {
                 console.log(position, pointsArray.length);
 
                 pointsArray.push(new gMaps.LatLng(position.coords.latitude, position.coords.longitude));
-                
+
                 $.ajax({
                     url: "/api/observation",
                     type: "POST",
@@ -50,14 +67,10 @@ $(document).ready(() => {
             });
         });
 
+
     }).catch((err) => {
         console.error(err);
     });
 
-    
-    
-
-
-    
 
 });
