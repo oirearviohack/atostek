@@ -5,6 +5,7 @@ import $ from 'jquery';
 var pointsArray;
 
 $(document).ready(() => {
+    $("body").addClass("loading");
 
     loadGoogleMapsAPI({
         key: "AIzaSyCNokgCGgBO7LMvwuiK3NiPivOILZBKieg",
@@ -36,6 +37,7 @@ $(document).ready(() => {
                 dataType: "json",
                 success: data => {
                     console.log(data);
+                    $("body").removeClass("loading");
                     data.forEach(function (element) {
                         var point = new gMaps.LatLng(element.latitude, element.longitude);
                         pointsArray.push(point);
