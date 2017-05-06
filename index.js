@@ -24,6 +24,7 @@ app.get('/api/heatmap', (req, res) => {
   });
 });
 
+
 app.post('/api/observation', (req, res) => {
     OdaPhr.createObservation(req.body)
         .then(function(response){
