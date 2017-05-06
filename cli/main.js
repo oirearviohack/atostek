@@ -70,6 +70,7 @@ function getCoughData(gMaps) {
         dataType: "json",
         success: data => {
             console.log(data);
+            $("body").removeClass("loading");
             data.forEach(function (element) {
                 var point = new gMaps.LatLng(element.latitude, element.longitude);
                 pointsArray.push(point);

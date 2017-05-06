@@ -14,13 +14,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var pointsArray;
 
 (0, _jquery2.default)(document).ready(function () {
+    (0, _jquery2.default)("body").addClass("loading");
 
     (0, _loadGoogleMapsApi2.default)({
         key: "AIzaSyCNokgCGgBO7LMvwuiK3NiPivOILZBKieg",
         libraries: ["visualization"]
     }).then(function (gMaps) {
-
-        //TODO: INITIALIZE HEATMAP FROM ODA DATA
         pointsArray = new gMaps.MVCArray();
 
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -34,9 +33,8 @@ var pointsArray;
             new gMaps.visualization.HeatmapLayer({
                 data: pointsArray,
                 map: map,
-                maxIntensity: 2,
-                radius: 20,
-                dissipating: true
+                maxIntensity: 1,
+                radius: 20
             });
 
             getCoughData(gMaps).then(function () {
@@ -86,6 +84,7 @@ function getCoughData(gMaps) {
         dataType: "json",
         success: function success(data) {
             console.log(data);
+            (0, _jquery2.default)("body").removeClass("loading");
             data.forEach(function (element) {
                 var point = new gMaps.LatLng(element.latitude, element.longitude);
                 pointsArray.push(point);
