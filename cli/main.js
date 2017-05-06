@@ -29,23 +29,14 @@ $(document).ready(() => {
                 radius: 20
             });
 
-            $.ajax({
-                url: "/api/heatmap",
-                type: "GET",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: data => {
-                    console.log(data);
-                    data.forEach(function (element) {
-                        var point = new gMaps.LatLng(element.latitude, element.longitude);
-                        pointsArray.push(point);
-                    }, this);
-                }
+            getCoughData(gMaps).then(function () {
+                setInterval(function () {
+                    console.log("Getting cough data from cache...");
+                    pointsArray = [];
+                    getCoughData(gMaps).then(function () { console.log("Get data from cache ready.") });
+                }, 20000);
             });
-
         });
-
-
 
         $('#addCough').click(e => {
             navigator.geolocation.getCurrentPosition((position) => {
@@ -67,10 +58,26 @@ $(document).ready(() => {
             });
         });
 
-
+        
     }).catch((err) => {
         console.error(err);
     });
 
 
 });
+
+function getCoughData(gMaps) {
+    return $.ajax({
+        url: "/api/heatmap",
+        type: "GET",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: data => {
+            console.log(data);
+            data.forEach(function (element) {
+                var point = new gMaps.LatLng(element.latitude, element.longitude);
+                pointsArray.push(point);
+            }, this);
+        }
+    });
+}

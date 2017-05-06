@@ -34,22 +34,19 @@ var pointsArray;
             new gMaps.visualization.HeatmapLayer({
                 data: pointsArray,
                 map: map,
-                maxIntensity: 1,
-                radius: 20
+                maxIntensity: 2,
+                radius: 20,
+                dissipating: true
             });
 
-            _jquery2.default.ajax({
-                url: "/api/heatmap",
-                type: "GET",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function success(data) {
-                    console.log(data);
-                    data.forEach(function (element) {
-                        var point = new gMaps.LatLng(element.latitude, element.longitude);
-                        pointsArray.push(point);
-                    }, undefined);
-                }
+            getCoughData(gMaps).then(function () {
+                setInterval(function () {
+                    console.log("Getting cough data from cache...");
+                    pointsArray = [];
+                    getCoughData(gMaps).then(function () {
+                        console.log("Get data from cache ready.");
+                    });
+                }, 20000);
             });
         });
 
@@ -78,6 +75,24 @@ var pointsArray;
         console.error(err);
     });
 });
+
+function getCoughData(gMaps) {
+    var _this = this;
+
+    return _jquery2.default.ajax({
+        url: "/api/heatmap",
+        type: "GET",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function success(data) {
+            console.log(data);
+            data.forEach(function (element) {
+                var point = new gMaps.LatLng(element.latitude, element.longitude);
+                pointsArray.push(point);
+            }, _this);
+        }
+    });
+}
 
 },{"jquery":2,"load-google-maps-api":3}],2:[function(require,module,exports){
 /*!
