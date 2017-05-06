@@ -31,7 +31,7 @@ $(document).ready(() => {
             getCoughData(gMaps).then(function () {
                 setInterval(function () {
                     console.log("Getting cough data from cache...");
-                    pointsArray = [];
+                    pointsArray.clear();
                     getCoughData(gMaps).then(function () { console.log("Get data from cache ready.") });
                 }, 20000);
             });
