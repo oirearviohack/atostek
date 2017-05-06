@@ -36,7 +36,9 @@ Architecture:
 
 ![GitHub Logo](/architecture.jpg)
 
-Libraries used:
+Tech used:
 - [load-google-maps-api](https://www.npmjs.com/package/load-google-maps-api#usage)
 - [Google Heatmap layer](https://developers.google.com/maps/documentation/javascript/heatmaplayer)
 - [Heatmap layer options](https://developers.google.com/maps/documentation/javascript/reference#HeatmapLayerOptions)
+- [ODA PHR Server](https://oda.medidemo.fi/phr/)
+
